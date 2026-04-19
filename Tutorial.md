@@ -7,7 +7,7 @@ to the server. As they become more comfortable and make more complex requests, t
 
 ## Prerequisites
 
-This tutorial assumes that you already have an existing project using React and Express. In order to properly handle images sent to the server, you will need an image processing library. The standard library for this purpose is Multer, which is what will be used for this tutorial. If you haven't done so, download it to your Express folder. You can do so with the following command:
+This tutorial assumes that you already have an existing project using Express. In order to properly handle images sent to the server, you will need an image processing library. The standard library for this purpose is Multer, which is what will be used for this tutorial. If you haven't done so, download it to your Express folder. You can do so with the following command:
 
 	npm install multer
 
