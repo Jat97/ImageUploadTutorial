@@ -1,4 +1,6 @@
-# How to Submit Multipart/Form-Data in JavaScript
+---
+title: How to Submit Multipart/Form-Data in JavaScript
+---
 
 ## Introduction
 
