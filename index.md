@@ -66,7 +66,7 @@ Now that the backend has been set up to process file uploads, you can write your
 
 	const form = new FormData();
 
-Once the object's been created, all you need to do is store the value of your data using FormData's append method. FormData.append() takes a key as its first parameter, and the value of your data as the second.
+Once the object's been created, all you need to do is store the value of your data using FormData's `append` method. This method takes a key as its first parameter, and the value of your data as the second.
 	
     form.append('profilepic', file);
 
