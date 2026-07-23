@@ -1,5 +1,5 @@
 ---
-title: How to Submit Multipart/Form-Data in JavaScript
+title: How to Submit and Store Multipart/Form-Data in JavaScript
 ---
 
 ## Introduction
@@ -9,9 +9,9 @@ to the server. As they become more comfortable and make more complex requests, t
 
 ## Prerequisites
 
-This tutorial assumes that you already have an existing project using Express. In order to properly handle images sent to the server, you will need an image processing library. The standard library for this purpose is Multer, which is what will be used for this tutorial. If you haven't done so, download it to your Express folder. You can do so with the following command:
+This tutorial assumes that you already have an existing project using Express. In order to properly handle images sent to the server, you will need an image processing library. The standard library for this purpose is Multer, which is what will be used for this tutorial. We'll also need to send the data to an image hosting site. One of the more popular options is Cloudinary, which this tutorial will be using. If you haven't done so, download them to your Express folder. You can do so with the following command:
 
-	npm install multer
+	npm install multer cloudinary
 
 ## Setting up Multer
 
@@ -56,9 +56,34 @@ Now that Multer's been configured, you need to call the `upload` function in the
 Alternatively, if you want the option to submit multiple files at once, you may use the `array` method instead. This takes the fieldname as the first parameter, and the maximum number of images allowed for the second.
 Regardless of whether you keep your middleware functions in separate files — as I do — or write them with your routes, the `upload` function must be called immediately after your endpoint. If you place the `upload` function anywhere else, then the function will not fire, and Multer will not process the file.
 
-### Something to Consider
+### Setting up Cloudinary
 
-Before moving on to the frontend, it's a good idea to verify how you're going to store the file data in your database, as you may encounter some issues depending on your approach. For example, if you save an image file's binary data, you could risk overloading your computer's memory when the images are rendered due to the size of the data in question. This could cause freezes, or even crashes. It's recommended to send your images to a third-party host, like Cloudinary or Azure, which will provide a URL that you can then save to your database.
+When uploading images to your database, it is important to consider the approach that you're going to use. If you save your image's binary data, then you could risk overloading your computer's memory when the images are rendered due to the data's size. This could cause freezes, or even crashes. This one of the reasons why it's recommended to use third-party hosts to store your images.
+
+Before you can begin using Cloudinary's library, you need to ensure that you've registered with the Cloudinary platform. You cannot use the library without an API key, a cloud name, and a secret key. For help with configuring these in your project, please consult the Node.js section of Cloudinary's documentation.
+
+In the file you use to set up Multer, add these import statements below your Multer import:
+    
+    const cloudinary = require('cloudinary');
+    const path = require('path');
+
+Path is built into Node.js, so you don't need to worry about installing it.
+
+Below your upload function, you're going to write another function to upload images to your database. With the Cloudinary library, this function only needs to be two lines.
+
+    module.exports.uploadImage = async (req) => {
+        let image = await cloudinary.v2.uploader.upload(path.join(`${req.file.destination}/${req.file.filename}`));
+
+        return image;
+    }
+
+Where Multer's `upload` method saves the image data to the relevant folder, this function retrieves the image and sends it to Cloudinary. Once the image has been uploaded, the function will return an object containing, among other things, a URL that can be saved to your database. As this process takes time, it's necessary for your function to be asynchronous.
+
+In your middleware file, import the function at the top level. Since you need to use the data returned from this function, you need to attach it to a new variable in the appropriate middleware.
+
+    let result = await uploadImage(req);
+
+For storing images into Cloudinary, you only need to save the returned data's `secure_url` property. As the name suggests, this is the URL for the uploaded image.
 
 ## Sending a File to the Server
 
@@ -96,4 +121,4 @@ When the request has been sent, be sure to check your assigned image folder for 
 
 ## Conclusion
 
-While multipart/form-data can be a bit difficult at first, it's a very common and valuable Content-Type that becomes much easier with Multer. When sending your files, be sure to verify that your fieldnames match and avoid specifying the Content-Type to prevent errors. Also, be mindful of whether you're sending one file or multiple to your server, and adjust your code accordingly to avoid sending an [object Object].
+While multipart/form-data can be a bit difficult at first, it's a very common and valuable Content-Type that becomes much easier with Multer. When used in conjunction with Cloudinary, you'll be able to both efficiently manage file handling and preventing memory issues when rendering your images. When sending your files, be sure to verify that your fieldnames match, and be sure to avoid specifying the Content-Type to prevent errors. It is also important to be mindful of the number of files that you're sending, as you do not want to send [object Object] to your server.
