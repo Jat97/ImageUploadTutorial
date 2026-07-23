@@ -60,7 +60,7 @@ Regardless of whether you keep your middleware functions in separate files — a
 
 When uploading images to your database, it is important to consider the approach that you're going to use. If you save your image's binary data, then you could risk overloading your computer's memory when the images are rendered due to the data's size. This could cause freezes, or even crashes. This one of the reasons why it's recommended to use third-party hosts to store your images.
 
-Before you can begin using Cloudinary's library, you need to ensure that you've registered with the Cloudinary platform. You cannot use the library without an API key, a cloud name, and a secret key. For help with configuring these in your project, please consult the Node.js section of Cloudinary's documentation.
+Before you can begin using Cloudinary's library, you need to ensure that you've registered with the Cloudinary platform. You cannot use the library without your API key, your cloud name, and your secret key. For help with configuring these in your project, please consult the Node.js section of Cloudinary's documentation.
 
 In the file you use to set up Multer, add these import statements below your Multer import:
     
