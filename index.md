@@ -117,7 +117,7 @@ Now that you've appended your data, you can write your fetch call. Much like wit
         console.log(data)
     })
 
-When the request has been sent, be sure to check your assigned image folder for the uploaded file. If the file has been saved, then Multer has successfully processed it.
+When the request has been sent, be sure to check your assigned image folder for the uploaded file. If the file has been saved, then Multer has successfully processed it. Don't forget to also check Cloudinary to see if the image has been uploaded to your cloud!
 
 ## Conclusion
 
